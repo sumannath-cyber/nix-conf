@@ -1,8 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
+    inputs.mangowm.nixosModules.mango
   ];
 
   # Allow unfree packages globally for the stable channel
@@ -37,11 +38,20 @@
     extraGroups = [ "wheel" "networkmanager" "audio" "video" ];
   };
 
-  # Base X11 support (Required for LightDM's greeter interface)
-  services.xserver.enable = true;
-
-  # Display Manager: LightDM
-  services.xserver.displayManager.lightdm.enable = true;
+  # Display Manager: greetd + tuigreet
+  services.greetd = {
+    enable = true;
+    settings = {
+      initial_session = {
+        command = "mango";
+        user = "suman"; # Auto-login on boot
+      };
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd mango";
+        user = "greeter";
+      };
+    };
+  };
 
   # Window Manager: MangoWC
   programs.mango.enable = true;
