@@ -8,14 +8,20 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    mangowm = {
+      url = "github:mangowm/mango";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
+  outputs = { self, nixpkgs, home-manager, mangowm, ... }@inputs:
   let
     system = "x86_64-linux";
   in {
     nixosConfigurations.idk-nix = nixpkgs.lib.nixosSystem {
       inherit system;
+      specialArgs = { inherit inputs; };
 
       modules = [
         ./configuration.nix
@@ -24,6 +30,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
+            extraSpecialArgs = { inherit inputs; };
             users.suman = import ./home.nix;
           };
         }
