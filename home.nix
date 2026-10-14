@@ -16,11 +16,11 @@
     neovim
   ];
 
-  # Automatically link everything in data/scripts to ~/.local/bin
-  home.file.".local/bin" = {
-    source = ./data/scripts;
-    recursive = true;
-  };
+  # Uncomment once you create the data/scripts folder and put at least 1 file inside it:
+  # home.file.".local/bin" = {
+  #   source = ./data/scripts;
+  #   recursive = true;
+  # };
 
   # Ensure ~/.local/bin is in your PATH
   home.sessionPath = [
